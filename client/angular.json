@@ -71,7 +71,12 @@
               "buildTarget": "angular-teslalightshow-manager:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "sslKey": "./certificats/localhost.key",
+            "sslCert": "./certificats/localhost.crt",
+            "ssl" : true
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

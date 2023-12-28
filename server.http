@@ -1,0 +1,27 @@
+### GET device all
+// Tip: putting scheme:// + host to {{host}} allows switching schemes between different environments
+GET {{host}}/devices/
+Accept: application/json
+
+
+### POST all information on one device
+POST {{host}}/devices/details
+Content-Type: application/x-www-form-urlencoded
+
+device = /dev/disk0
+
+### Post information of unkow device
+POST {{host}}/devices/details
+Content-Type: application/x-www-form-urlencoded
+
+device = /dev/diskC
+
+
+
+### Send POST request with body as parameters
+POST {{host}}/devices/disk1
+Content-Type: application/x-www-form-urlencoded
+
+id = 999 &
+value = content &
+fact = IntelliJ %+ HTTP Client %= <3

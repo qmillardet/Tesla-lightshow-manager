@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+
+import {Component, ElementRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { usb, getDeviceList } from 'usb';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +13,19 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'angular-teslalightshow-manager';
+
+  constructor() {
+
+    const drivelist = require('drivelist');
+
+    drivelist.list().then((drives : any) => {
+
+      drives.forEach((drive : any) => {
+        console.log(drive);
+      });
+    });
+  }
+
+
+
 }
