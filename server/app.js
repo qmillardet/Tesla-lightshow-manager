@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var deviceRouter = require('./routes/device');
 var usersRouter = require('./routes/users');
+var lightshowRouter = require('./routes/lightshow');
 
 var app = express();
 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/devices', deviceRouter);
 app.use('/users', usersRouter);
+app.use('/lightshow', lightshowRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

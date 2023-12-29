@@ -19,3 +19,5 @@ class Device{
         this.#montPoint = value;
     }
 }
+
+module.exports = Device
