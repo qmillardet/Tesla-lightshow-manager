@@ -16,6 +16,12 @@ Content-Type: application/x-www-form-urlencoded
 
 device = /dev/diskC
 
+### Post information of unkow device
+POST {{host}}/copy/server
+Content-Type: application/x-www-form-urlencoded
+
+device=/dev/disk3&mountpoint=Test&lightshowName=Ghostbuster
+
 
 
 ### Send POST request with body as parameters
