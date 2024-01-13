@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain } = require('electron')
 // inclusion du chemin du module Node.js au tout début de votre fichier
 const path = require('node:path')
 
+const deviceInformation = require('./service/deviceinformation')
+
 // modification de votre fonction existante createWindow()
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -24,6 +26,10 @@ app.whenReady().then(() => {
     })
 
     ipcMain.handle('ping', () => 'pong')
+    ipcMain.handle('device-info', () =>  {
+        let test = new deviceInformation();
+        return test.deviceList()
+    })
 })
 
 app.on('window-all-closed', () => {
