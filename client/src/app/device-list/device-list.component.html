@@ -1,0 +1,29 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="device">
+    <th mat-header-cell *matHeaderCellDef> Nom </th>
+    <td mat-cell *matCellDef="let element"> {{element.device}} </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="mountpoint">
+    <th mat-header-cell *matHeaderCellDef> Point de montages </th>
+    <td mat-cell *matCellDef="let element"> <ul><li *ngFor="let mountPoint of element.mountpoint"> {{ mountPoint.label }}</li></ul> </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Actions </th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-fab color="green" aria-label="Ajouter un Ligthshow sur cet appareil" (click)="openElement(element)">
+      <mat-icon>add</mat-icon>
+    </button> </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
