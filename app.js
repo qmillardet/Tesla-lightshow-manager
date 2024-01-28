@@ -3,6 +3,7 @@ const url = require("url");
 const path = require("path");
 const deviceInformation = require('./service/deviceinformation')
 const LightshowService = require('./service/LightshowService')
+const CopyManagerService = require("./service/CopyManagerService");
 
 let mainWindow
 
@@ -38,6 +39,11 @@ function createWindow () {
   ipcMain.handle('lightshow-list', () =>  {
     let ligthshowService = new LightshowService();
     return ligthshowService.getAllLigthshow()
+  })
+
+  ipcMain.handle('lightshow-copy',  async (event, device, mountPoint, lightshowName) =>  {
+    let copyManager = new CopyManagerService();
+    await copyManager.copyFromDisk(device, mountPoint, lightshowName)
   })
 
 }

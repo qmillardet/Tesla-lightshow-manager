@@ -55,7 +55,17 @@ export class DeviceListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result : any) => {
-      console.log(result.value)
+      let deviceName : string = result.device.device;
+      let mountPoint : string = result.device.mountPoint.label
+      result.lightshows.value.forEach((lightshow: string ) => {
+        try{
+          (<any>window).lightshow.copy(deviceName, mountPoint, lightshow).then((result :any) => {
+            console.log("ok")
+          })
+        } catch (e){
+          console.log("error")
+        }
+      })
     });
   }
 }

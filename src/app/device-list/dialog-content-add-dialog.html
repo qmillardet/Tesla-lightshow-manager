@@ -11,5 +11,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="toppings" cdkFocusInitial>Install</button>
+  <button mat-button [mat-dialog-close]="{ 'lightshows' : toppings, 'device' : deviceName }" cdkFocusInitial>Install</button>
 </mat-dialog-actions>
