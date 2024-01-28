@@ -8,6 +8,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {SnackbarComponent} from "../snackbar/snackbar.component";
 
 export interface DeviceList {
   device: string;
@@ -38,34 +40,50 @@ export class DeviceListComponent implements OnInit {
   displayedColumns: string[] = ['device', 'mountpoint', 'actions'];
   dataSource : DeviceList[] = [];
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog, private _snackBar: MatSnackBar) {}
 
    ngOnInit(): void {
      (<any>window).device.info().then((e:any ) => {
        this.dataSource = e;
      })
   }
+  openSnackBar(message : string) {
+    this._snackBar.open(message,"Fermer");
+  }
 
   openElement(deviceList : DeviceList, mountPoint : MountPoint) : void {
     const dialogRef = this.dialog.open(DialogContentExampleDialog, {
-        data : {
-          'device' : deviceList.device,
-          'mountPoint' : mountPoint
-        },
+      data: {
+        'device': deviceList.device,
+        'mountPoint': mountPoint
+      },
     });
 
-    dialogRef.afterClosed().subscribe((result : any) => {
-      let deviceName : string = result.device.device;
-      let mountPoint : string = result.device.mountPoint.label
-      result.lightshows.value.forEach((lightshow: string ) => {
-        try{
-          (<any>window).lightshow.copy(deviceName, mountPoint, lightshow).then((result :any) => {
-            console.log("ok")
-          })
-        } catch (e){
-          console.log("error")
-        }
-      })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      let deviceName: string = result.device.device;
+      let mountPoint: string = result.device.mountPoint.label
+      let lightshows: string[] = result.lightshows.value;
+      let resSuccess: string[] = [];
+      let resError: string[] = [];
+      if (lightshows) {
+        lightshows.forEach(async (lightshow: string) => {
+
+          if (lightshow) {
+            try{
+
+              const {error, result} = await (<any>window).lightshow.copy(deviceName, mountPoint, lightshow)
+              if (error) {
+                this.openSnackBar("Error (" + lightshow + ")")
+              } else {
+                this.openSnackBar("Copy finish (" + lightshow + ")")
+              }
+            } catch (e){
+              this.openSnackBar("Error (" + lightshow + ")")
+            }
+          }
+
+        });
+      }
     });
   }
 }

@@ -17,8 +17,6 @@ contextBridge.exposeInMainWorld('device', {
 })
 contextBridge.exposeInMainWorld('lightshow', {
     list: () => ipcRenderer.invoke('lightshow-list'),
-    copy: (device, mountPoint, lightshow) => {
-        ipcRenderer.invoke('lightshow-copy', device, mountPoint, lightshow)
-    }
+    copy: async (device, mountPoint, lightshow) => ipcRenderer.invoke('lightshow-copy', device, mountPoint, lightshow)
     //Nous pouvons exposer des variables en plus des fonctions
 })

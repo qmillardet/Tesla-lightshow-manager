@@ -4,13 +4,12 @@ const path = require("path");
 const deviceInformation = require('./service/deviceinformation')
 const LightshowService = require('./service/LightshowService')
 const CopyManagerService = require("./service/CopyManagerService");
+const environnement = process.env.ENV_NAME || 'prod';
 
 let mainWindow
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, 'preload.js')
@@ -24,8 +23,12 @@ function createWindow () {
       slashes: true
     })
   );
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools({mode: "detach"})
+  if (environnement === 'dev'){
+    // Open the DevTools.
+    let mode  = process.env.DEV_MODE || 'detach';
+    mainWindow.webContents.openDevTools({mode: mode})
+  }
+
 
   mainWindow.on('closed', function () {
     mainWindow = null
