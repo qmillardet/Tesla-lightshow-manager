@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
 import {CommonModule} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
-import {MatDialogModule} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {MatDialog} from "@angular/material/dialog";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
@@ -17,6 +17,11 @@ export interface DeviceList {
 export interface MountPoint {
   path: string;
   label: string;
+}
+
+export interface DeviceSelected {
+  device: string;
+  mountPoint: MountPoint;
 }
 
 const ELEMENT_DATA: DeviceList[] = [];
@@ -41,8 +46,13 @@ export class DeviceListComponent implements OnInit {
      })
   }
 
-  openElement(deviceList : DeviceList) : void {
-    const dialogRef = this.dialog.open(DialogContentExampleDialog);
+  openElement(deviceList : DeviceList, mountPoint : MountPoint) : void {
+    const dialogRef = this.dialog.open(DialogContentExampleDialog, {
+        data : {
+          'device' : deviceList.device,
+          'mountPoint' : mountPoint
+        },
+    });
 
     dialogRef.afterClosed().subscribe((result : any) => {
       console.log(result.value)
@@ -59,10 +69,17 @@ export class DeviceListComponent implements OnInit {
 export class DialogContentExampleDialog implements OnInit {
   lightshows : String[] = [];
 
-  deviceName : String = "";
+  deviceName : DeviceSelected;
 
   toppings = new FormControl('');
   toppingList: string[] = [];
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogContentExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DeviceSelected,
+  ) {
+    this.deviceName = data;
+  }
 
   ngOnInit(): void {
     (<any>window).lightshow.list().then((e:any ) => {

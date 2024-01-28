@@ -19,7 +19,7 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef> Actions </th>
     <td mat-cell *matCellDef="let element">
-      <button mat-fab color="green" aria-label="Ajouter un Ligthshow sur cet appareil" (click)="openElement(element)">
+      <button mat-fab *ngFor="let mountPoint of element.mountpoint"  color="green" aria-label="Ajouter un Ligthshow sur cet appareil" (click)="openElement(element, mountPoint)">
       <mat-icon>add</mat-icon>
     </button> </td>
   </ng-container>
