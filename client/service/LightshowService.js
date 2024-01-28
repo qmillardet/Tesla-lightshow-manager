@@ -1,17 +1,11 @@
-const { PrismaClient } = require('@prisma/client')
 const fs = require('fs')
+require('dotenv').config();
 
-const prisma = new PrismaClient()
 const usbLightshow = process.env.LIGHTSHOW_DIR || '';
 class LigthshowService{
 
 
-    async getAllLigthshow() {
-        const posts = await prisma.Lightshow.findMany({
-        })
 
-        return posts;
-    }
 
     //
     // createLigthshow(ligthshow) {
@@ -59,6 +53,19 @@ class LigthshowService{
             filename = tmp;
         }
         return filename;
+    }
+
+    getAllLigthshow() {
+      let lightshows = [];
+      let files = fs.readdirSync(usbLightshow);
+      files.forEach(function (file) {
+        // Do whatever you want to do with the file
+        let lightshowName = file.split('.')[0];
+        if (!lightshows.includes(lightshowName) && lightshowName){
+          lightshows.push(lightshowName)
+        }
+      });
+      return lightshows;
     }
 }
 

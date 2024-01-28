@@ -2,6 +2,7 @@ const {app, BrowserWindow, ipcMain} = require('electron')
 const url = require("url");
 const path = require("path");
 const deviceInformation = require('./service/deviceinformation')
+const LightshowService = require('./service/LightshowService')
 
 let mainWindow
 
@@ -32,6 +33,11 @@ function createWindow () {
   ipcMain.handle('device-info', () =>  {
     let test = new deviceInformation();
     return test.deviceList()
+  })
+
+  ipcMain.handle('lightshow-list', () =>  {
+    let ligthshowService = new LightshowService();
+    return ligthshowService.getAllLigthshow()
   })
 
 }
