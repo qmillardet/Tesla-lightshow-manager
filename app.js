@@ -39,9 +39,9 @@ function createWindow () {
     return test.deviceList()
   })
 
-  ipcMain.handle('lightshow-list', () =>  {
+  ipcMain.handle('lightshow-list', (event, paritionName) =>  {
     let ligthshowService = new LightshowService();
-    return ligthshowService.getAllLigthshow()
+    return ligthshowService.getAllLigthshow(paritionName)
   })
 
   ipcMain.handle('lightshow-copy',  async (event, device, mountPoint, lightshowName) =>  {

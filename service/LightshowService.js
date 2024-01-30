@@ -55,7 +55,7 @@ class LigthshowService{
         return filename;
     }
 
-    getAllLigthshow() {
+    getAllLigthshow(ParitionName) {
       let lightshows = [];
       let files = fs.readdirSync(usbLightshow);
       files.forEach(function (file) {

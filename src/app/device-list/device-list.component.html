@@ -3,23 +3,18 @@
   <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="device">
-    <th mat-header-cell *matHeaderCellDef> Nom </th>
-    <td mat-cell *matCellDef="let element"> {{element.device}} </td>
-  </ng-container>
 
   <!-- Weight Column -->
   <ng-container matColumnDef="mountpoint">
-    <th mat-header-cell *matHeaderCellDef> Point de montages </th>
-    <td mat-cell *matCellDef="let element"> <ul><li *ngFor="let mountPoint of element.mountpoint"> {{ mountPoint.label }}</li></ul> </td>
+    <th mat-header-cell *matHeaderCellDef> Device </th>
+    <td mat-cell *matCellDef="let element">  {{ element.label }}</td>
   </ng-container>
 
   <!-- Weight Column -->
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef> Actions </th>
     <td mat-cell *matCellDef="let element">
-      <button mat-fab *ngFor="let mountPoint of element.mountpoint"  color="green" aria-label="Ajouter un Ligthshow sur cet appareil" (click)="openElement(element, mountPoint)">
+      <button mat-fab color="green" aria-label="Ajouter un Ligthshow sur cet appareil" (click)="openElement(element)">
       <mat-icon>add</mat-icon>
     </button> </td>
   </ng-container>

@@ -21,11 +21,6 @@ export interface MountPoint {
   label: string;
 }
 
-export interface DeviceSelected {
-  device: string;
-  mountPoint: MountPoint;
-}
-
 const ELEMENT_DATA: DeviceList[] = [];
 
 @Component({
@@ -37,7 +32,7 @@ const ELEMENT_DATA: DeviceList[] = [];
 })
 export class DeviceListComponent implements OnInit {
 
-  displayedColumns: string[] = ['device', 'mountpoint', 'actions'];
+  displayedColumns: string[] = ['mountpoint', 'actions'];
   dataSource : DeviceList[] = [];
 
   constructor(public dialog: MatDialog, private _snackBar: MatSnackBar) {}
@@ -51,10 +46,9 @@ export class DeviceListComponent implements OnInit {
     this._snackBar.open(message,"Fermer");
   }
 
-  openElement(deviceList : DeviceList, mountPoint : MountPoint) : void {
+  openElement( mountPoint : MountPoint) : void {
     const dialogRef = this.dialog.open(DialogContentExampleDialog, {
       data: {
-        'device': deviceList.device,
         'mountPoint': mountPoint
       },
     });
@@ -97,20 +91,20 @@ export class DeviceListComponent implements OnInit {
 export class DialogContentExampleDialog implements OnInit {
   lightshows : String[] = [];
 
-  deviceName : DeviceSelected;
+  deviceName : MountPoint;
 
   toppings = new FormControl('');
   toppingList: string[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<DialogContentExampleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DeviceSelected,
+    @Inject(MAT_DIALOG_DATA) public data: MountPoint,
   ) {
     this.deviceName = data;
   }
 
   ngOnInit(): void {
-    (<any>window).lightshow.list().then((e:any ) => {
+    (<any>window).lightshow.list(this.deviceName).then((e:any ) => {
       this.toppingList = e;
     })
   }

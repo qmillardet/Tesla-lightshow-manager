@@ -7,10 +7,13 @@ class Deviceinformation {
         const drives =await  drivelist.list()
         let element = [];
         drives.forEach((drive) => {
-            element.push({
-                mountpoint : drive.mountpoints,
-                device : drive.device
-            })
+          let mountPoints   = drive.mountpoints;
+          mountPoints.forEach((mountPoint ) =>{
+            if (!element.includes(mountPoint)){
+              element.push(mountPoint)
+            }
+          } )
+
         })
         return element;
     }
