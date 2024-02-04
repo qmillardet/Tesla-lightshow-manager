@@ -58,8 +58,8 @@ export class DeviceListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
-      let deviceName: string = result.device.device;
-      let mountPoint: string = result.device.mountPoint.label
+      let deviceName: string = result.device.path;
+      let mountPoint: string = result.device.label
       let lightshows: string[] = result.lightshows.value;
       let resSuccess: string[] = [];
       let resError: string[] = [];
@@ -71,12 +71,14 @@ export class DeviceListComponent implements OnInit {
 
               const {error, result} = await (<any>window).lightshow.copy(deviceName, mountPoint, lightshow)
               if (error) {
-                this.openSnackBar("Error (" + lightshow + ")")
+                throw new Error(error)
               } else {
                 this.openSnackBar("Copy finish (" + lightshow + ")")
               }
-            } catch (e){
-              this.openSnackBar("Error (" + lightshow + ")")
+            } catch (e : any){
+              if (!e.message.includes('Already exist Lightshow on device, please check file')){
+                this.openSnackBar("Error (" + lightshow + ")")
+              }
             }
           }
 
@@ -114,7 +116,6 @@ export class DialogContentExampleDialog implements OnInit {
           this.selectedElement.push(lightShowDTO.lightshowName)
         }
       })
-      console.log(this.selectedElement);
       this.toppingList = e;
     })
   }

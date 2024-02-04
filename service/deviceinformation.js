@@ -1,3 +1,5 @@
+const NotFoundDevice = require("./Exceptions/NotFoundDevice");
+
 class Deviceinformation {
 
 
@@ -39,14 +41,15 @@ class Deviceinformation {
         const drives =await  drivelist.list()
         let element = null;
         drives.forEach((drive) => {
-            if (drive.device === deviceName ){
-                drive.mountpoints.forEach((mountPoint) => {
-                    if (mountPoint.label === pointName){
-                        element = mountPoint.path
-                    }
-                })
-            }
+          drive.mountpoints.forEach((mountPoint) => {
+              if (mountPoint.label === pointName){
+                  element = mountPoint.path
+              }
+          })
         })
+      if (element === null){
+        throw new NotFoundDevice('Device "' + deviceName + '" not found');
+      }
         return element;
     }
 }

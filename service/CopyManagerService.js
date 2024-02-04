@@ -10,7 +10,7 @@ class CopyManagerService{
         let lightshowManagerService = new LigthshowManager();
 
         if (!lightshowManagerService.isExistLightshowOnServer(lightshowName)){
-            throw new Error('Ce ligtshow n\'existe pas')
+            throw new Error('Ce lightshow n\'existe pas : ' + lightshowName)
         }
         let ligthsowAudioFile = lightshowManagerService.getAudioFileName(lightshowName);
         let ligthsowFseqFile = lightshowManagerService.getFseqLigthshow(lightshowName);
@@ -20,7 +20,7 @@ class CopyManagerService{
         await this.#moveTeslaCamDir(device, mountPointLabel)
 
         if (this.#isAlreadyExistLightshow(baseDevice, lightshowName)){
-            throw new Error('Already exist Lighttshow on device, please check file')
+            throw new Error('Already exist Lightshow on device, please check file : ' + baseDevice + ' # ' + lightshowName)
         }
         fs.mkdirSync(baseDevice, { recursive: true })
         fs.copyFileSync(ligthsowAudioFile,  baseDevice+lightshowName + '.mp3' )
