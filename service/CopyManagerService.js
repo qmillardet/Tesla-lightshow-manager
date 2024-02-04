@@ -53,6 +53,32 @@ class CopyManagerService{
         let deviceMountPoint = await deviceManager.getMountPoint(device, mountPointLabel);
         return deviceMountPoint + '/Lightshow/'
     }
+
+  async removeFromDisk(device, mountPointLabel, lightshowName ){
+    let lightshowManagerService = new LigthshowManager();
+
+    if (!lightshowManagerService.isExistLightshowOnServer(lightshowName)){
+      throw new Error('Ce lightshow n\'existe pas : ' + lightshowName)
+    }
+
+    let baseDevice = await this.#getDeviceBaseWithLigthShow(device, mountPointLabel);
+
+    await this.#moveTeslaCamDir(device, mountPointLabel)
+
+    if (this.#isAlreadyExistLightshow(baseDevice, lightshowName)){
+      if (fs.existsSync(baseDevice+lightshowName + '.mp3' )){
+        fs.rmSync(  baseDevice+lightshowName + '.mp3' )
+      } else {
+        fs.rmSync(  baseDevice+lightshowName + '.wav' )
+      }
+      fs.rmSync( baseDevice + lightshowName + '.fseq'  )
+      let res = fs.readdirSync(baseDevice)
+      if (!res.length){
+        fs.rmdirSync( baseDevice)
+      }
+    }
+
+  }
 }
 
 module.exports = CopyManagerService

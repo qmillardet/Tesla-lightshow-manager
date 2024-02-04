@@ -49,6 +49,11 @@ function createWindow () {
     await copyManager.copyFromDisk(device, mountPoint, lightshowName)
   })
 
+  ipcMain.handle('lightshow-remove',  async (event, device, mountPoint, lightshowName) =>  {
+    let copyManager = new CopyManagerService();
+    await copyManager.removeFromDisk(device, mountPoint, lightshowName)
+  })
+
 }
 
 app.on('ready', createWindow)

@@ -65,8 +65,16 @@ class LigthshowService{
       let files = fs.readdirSync(usbLightshow);
       files.forEach( (file) => {
         // Do whatever you want to do with the file
-        let lightshowName = file.split('.')[0];
-
+        let lightshowNameArray = file.split('.');
+        let lightshowName = "";
+        lightshowNameArray.forEach((element, index) => {
+          if (index !== (lightshowNameArray.length - 1)){
+            if (index !== 0){
+              lightshowName += '.'
+            }
+            lightshowName += element;
+          }
+        })
         let lightshowObjet = {
           lightshowName : lightshowName,
           onDevice : this.isExistLigthshowOnPath(paritionName.path, lightshowName)
