@@ -58,60 +58,45 @@ export class DeviceListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log(result)
-      let deviceName: string = result.device.path;
-      let mountPoint: string = result.device.label
-      let lightshows: string[] = result.lightshows.value;
-      let resSuccess: string[] = [];
-      let resError: string[] = [];
-      let toRemoveLightshow: string[] = [];
-      result.allLightshow.forEach((lightshow : LigthShowDto) => {
+      if (result){
+        let deviceName: string = result.device.path;
+        let mountPoint: string = result.device.label
+        let lightshows: string[] = result.lightshows.value;
+        let resSuccess: string[] = [];
+        let resError: string[] = [];
+        let toRemoveLightshow: string[] = [];
+        result.allLightshow.forEach((lightshow : LigthShowDto) => {
 
-        if (!lightshows.includes(lightshow.lightshowName)){
-          toRemoveLightshow.push(lightshow.lightshowName)
+          if (!lightshows.includes(lightshow.lightshowName)){
+            toRemoveLightshow.push(lightshow.lightshowName)
+          }
+        })
+
+        if (lightshows) {
+          lightshows.forEach(async (lightshow: string) => {
+
+          if (lightshow) {
+            try{
+              await (<any>window).lightshow.copy(deviceName, mountPoint, lightshow)
+            } catch (e:any){
+              console.log(e.message)
+            }
+          }
+
+          });
         }
-      })
 
-      if (lightshows) {
-        lightshows.forEach(async (lightshow: string) => {
+        if (toRemoveLightshow) {
+          toRemoveLightshow.forEach(async (lightshow: string) => {
 
-          if (lightshow) {
-            try{
-              const {error, result} = await (<any>window).lightshow.copy(deviceName, mountPoint, lightshow)
-              if (error) {
-                throw new Error(error)
-              } else {
-                this.openSnackBar("Copy finish (" + lightshow + ")")
-              }
-            } catch (e : any){
-              if (!e.message.includes('Already exist Lightshow on device, please check file')){
-                this.openSnackBar("Error (" + lightshow + ")")
-              }
+            if (lightshow) {
+              await (<any>window).lightshow.remove(deviceName, mountPoint, lightshow)
             }
-          }
 
-        });
+          });
+        }
       }
 
-      if (toRemoveLightshow) {
-        toRemoveLightshow.forEach(async (lightshow: string) => {
-
-          if (lightshow) {
-            try{
-
-              const {error, result} = await (<any>window).lightshow.remove(deviceName, mountPoint, lightshow)
-              if (error) {
-                throw new Error(error)
-              }
-            } catch (e : any){
-              if (!e.message.includes('Already exist Lightshow on device, please check file')){
-                this.openSnackBar("Error (" + lightshow + ")")
-              }
-            }
-          }
-
-        });
-      }
     });
   }
 }

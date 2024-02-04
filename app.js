@@ -4,6 +4,7 @@ const path = require("path");
 const deviceInformation = require('./service/deviceinformation')
 const LightshowService = require('./service/LightshowService')
 const CopyManagerService = require("./service/CopyManagerService");
+const AlreadyExistLightshowError = require("./service/Exceptions/AlreadyExistLightshowError");
 const environnement = process.env.ENV_NAME || 'prod';
 
 let mainWindow
@@ -45,8 +46,16 @@ function createWindow () {
   })
 
   ipcMain.handle('lightshow-copy',  async (event, device, mountPoint, lightshowName) =>  {
-    let copyManager = new CopyManagerService();
-    await copyManager.copyFromDisk(device, mountPoint, lightshowName)
+    try{
+      let copyManager = new CopyManagerService();
+      await copyManager.copyFromDisk(device, mountPoint, lightshowName)
+    } catch (e){
+      if (e instanceof AlreadyExistLightshowError){
+        console.info(e.message)
+      } else {
+        throw e
+      }
+    }
   })
 
   ipcMain.handle('lightshow-remove',  async (event, device, mountPoint, lightshowName) =>  {

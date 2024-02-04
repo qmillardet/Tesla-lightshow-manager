@@ -3,6 +3,7 @@ const fs = require('fs');
 const LigthshowManager = require('./LightshowService')
 const DeviceManager = require('./deviceinformation');
 const { join } = require('node:path');
+const AlreadyExistLightshowError = require("./Exceptions/AlreadyExistLightshowError");
 
 
 class CopyManagerService{
@@ -20,7 +21,7 @@ class CopyManagerService{
         await this.#moveTeslaCamDir(device, mountPointLabel)
 
         if (this.#isAlreadyExistLightshow(baseDevice, lightshowName)){
-            throw new Error('Already exist Lightshow on device, please check file : ' + baseDevice + ' # ' + lightshowName)
+            throw new AlreadyExistLightshowError('Already exist Lightshow on device, please check file : ' + baseDevice + ' # ' + lightshowName)
         }
         fs.mkdirSync(baseDevice, { recursive: true })
         fs.copyFileSync(ligthsowAudioFile,  baseDevice+lightshowName + '.mp3' )
