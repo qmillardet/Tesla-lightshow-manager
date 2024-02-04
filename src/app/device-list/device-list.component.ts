@@ -10,6 +10,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {SnackbarComponent} from "../snackbar/snackbar.component";
+import {MatOption, MatOptionModule} from "@angular/material/core";
 
 export interface DeviceList {
   device: string;
@@ -19,6 +20,11 @@ export interface DeviceList {
 export interface MountPoint {
   path: string;
   label: string;
+}
+
+export interface LigthShowDto {
+  lightshowName: string;
+  onDevice: boolean;
 }
 
 const ELEMENT_DATA: DeviceList[] = [];
@@ -48,9 +54,7 @@ export class DeviceListComponent implements OnInit {
 
   openElement( mountPoint : MountPoint) : void {
     const dialogRef = this.dialog.open(DialogContentExampleDialog, {
-      data: {
-        'mountPoint': mountPoint
-      },
+      data: mountPoint,
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
@@ -86,15 +90,14 @@ export class DeviceListComponent implements OnInit {
   selector: 'dialog-content-add-dialog',
   templateUrl: 'dialog-content-add-dialog.html',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, CommonModule, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule],
+  imports: [MatDialogModule, MatButtonModule, CommonModule, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule, MatOptionModule],
 })
 export class DialogContentExampleDialog implements OnInit {
-  lightshows : String[] = [];
-
   deviceName : MountPoint;
 
   toppings = new FormControl('');
-  toppingList: string[] = [];
+  toppingList: LigthShowDto[] = [];
+  selectedElement : string[] =[];
 
   constructor(
     public dialogRef: MatDialogRef<DialogContentExampleDialog>,
@@ -104,7 +107,14 @@ export class DialogContentExampleDialog implements OnInit {
   }
 
   ngOnInit(): void {
-    (<any>window).lightshow.list(this.deviceName).then((e:any ) => {
+    (<any>window).lightshow.list(this.deviceName).then((e:LigthShowDto[] ) => {
+      this.selectedElement = [];
+      e.forEach((lightShowDTO : LigthShowDto) => {
+        if (lightShowDTO.onDevice){
+          this.selectedElement.push(lightShowDTO.lightshowName)
+        }
+      })
+      console.log(this.selectedElement);
       this.toppingList = e;
     })
   }

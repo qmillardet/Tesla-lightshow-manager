@@ -29,6 +29,10 @@ class LigthshowService{
         return usbLightshow + '/' + ligthshowName
     }
 
+    isExistLigthshowOnPath(path, lightshowName){
+      return fs.existsSync(path + '/lightshow/' + lightshowName + '.fseq')
+    }
+
     getAudioFileName(ligthshowName){
         let base = this.#getBaseFile(ligthshowName)
         let extensions = [ 'mp3', 'wav']
@@ -55,14 +59,21 @@ class LigthshowService{
         return filename;
     }
 
-    getAllLigthshow(ParitionName) {
+    getAllLigthshow(paritionName) {
       let lightshows = [];
+      let ligthshowNames = [];
       let files = fs.readdirSync(usbLightshow);
-      files.forEach(function (file) {
+      files.forEach( (file) => {
         // Do whatever you want to do with the file
         let lightshowName = file.split('.')[0];
-        if (!lightshows.includes(lightshowName) && lightshowName){
-          lightshows.push(lightshowName)
+
+        let lightshowObjet = {
+          lightshowName : lightshowName,
+          onDevice : this.isExistLigthshowOnPath(paritionName.path, lightshowName)
+        };
+        if (!ligthshowNames.includes(lightshowName) && lightshowName){
+          lightshows.push(lightshowObjet)
+          ligthshowNames.push(lightshowName)
         }
       });
       return lightshows;
