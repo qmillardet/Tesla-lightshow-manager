@@ -44,9 +44,11 @@ export class DeviceListComponent implements OnInit {
   constructor(public dialog: MatDialog, private _snackBar: MatSnackBar) {}
 
    ngOnInit(): void {
-     (<any>window).device.info().then((e:any ) => {
-       this.dataSource = e;
-     })
+    setInterval(() : void => {
+      (<any>window).device.info().then((e:any ) => {
+        this.dataSource = e;
+      })
+    }, 2000)
   }
   openSnackBar(message : string) {
     this._snackBar.open(message,"Fermer");
@@ -131,5 +133,6 @@ export class DialogContentExampleDialog implements OnInit {
       })
       this.toppingList = e;
     })
+
   }
 }
