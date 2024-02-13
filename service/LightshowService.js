@@ -1,10 +1,11 @@
 const fs = require('fs')
+const {dialog} = require("electron");
 require('dotenv').config();
 
-const usbLightshow = process.env.LIGHTSHOW_DIR || '';
+
 class LigthshowService{
 
-
+  static usbLigthsow;
 
 
     //
@@ -19,6 +20,15 @@ class LigthshowService{
     //     })
     // }
 
+  constructor() {
+    let envVarUsbLigthshow  = process.env.LIGHTSHOW_DIR
+    if (!LigthshowService.usbLigthsow && envVarUsbLigthshow ){
+      LigthshowService.usbLigthsow = envVarUsbLigthshow;
+    } else if (!LigthshowService.usbLigthsow){
+      LigthshowService.usbLigthsow = dialog.showOpenDialogSync({ properties: ['openDirectory'] })[0]
+    }
+  }
+
     isExistLightshowOnServer(ligthshowName){
         let audio = this.getAudioFileName(ligthshowName) !== null;
         let fseq = this.getFseqLigthshow(ligthshowName) !== null;
@@ -26,7 +36,7 @@ class LigthshowService{
     }
 
     #getBaseFile(ligthshowName){
-        return usbLightshow + '/' + ligthshowName
+        return LigthshowService.usbLigthsow + '/' + ligthshowName
     }
 
     isExistLigthshowOnPath(path, lightshowName){
@@ -51,7 +61,7 @@ class LigthshowService{
 
     getFseqLigthshow(ligthshowName){
         let filename = null;
-        let base2 = usbLightshow + '/' + ligthshowName
+        let base2 = LigthshowService.usbLigthsow + '/' + ligthshowName
         let tmp = base2 + '.fseq'
         if (fs.existsSync(tmp)){
             filename = tmp;
@@ -62,7 +72,7 @@ class LigthshowService{
     getAllLigthshow(paritionName) {
       let lightshows = [];
       let ligthshowNames = [];
-      let files = fs.readdirSync(usbLightshow);
+      let files = fs.readdirSync(LigthshowService.usbLigthsow);
       files.forEach( (file) => {
         // Do whatever you want to do with the file
         let lightshowNameArray = file.split('.');
