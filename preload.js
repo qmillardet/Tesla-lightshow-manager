@@ -12,7 +12,8 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 contextBridge.exposeInMainWorld('device', {
-    info: () => ipcRenderer.invoke('device-info')
+    info: () => ipcRenderer.invoke('device-info'),
+    eject: (device) => ipcRenderer.invoke('device-eject', device)
     //Nous pouvons exposer des variables en plus des fonctions
 })
 contextBridge.exposeInMainWorld('lightshow', {

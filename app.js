@@ -1,7 +1,7 @@
 const {app, BrowserWindow, ipcMain, dialog} = require('electron')
 const url = require("url");
 const path = require("path");
-const deviceInformation = require('./service/deviceinformation')
+const DeviceService = require('./service/DeviceService')
 const LightshowService = require('./service/LightshowService')
 const CopyManagerService = require("./service/CopyManagerService");
 const AlreadyExistLightshowError = require("./service/Exceptions/AlreadyExistLightshowError");
@@ -30,13 +30,67 @@ function createWindow () {
     mainWindow.webContents.openDevTools({mode: mode})
   }
 
+  let grantedDeviceThroughPermHandler
+
+  mainWindow.webContents.session.on('select-usb-device', (event, details, callback) => {
+    // Add events to handle devices being added or removed before the callback on
+    // `select-usb-device` is called.
+    mainWindow.webContents.session.on('usb-device-added', (event, device) => {
+      console.log('usb-device-added FIRED WITH', device)
+      // Optionally update details.deviceList
+    })
+
+    mainWindow.webContents.session.on('usb-device-removed', (event, device) => {
+      console.log('usb-device-removed FIRED WITH', device)
+      // Optionally update details.deviceList
+    })
+
+    event.preventDefault()
+    if (details.deviceList && details.deviceList.length > 0) {
+      const deviceToReturn = details.deviceList.find((device) => {
+        return !grantedDeviceThroughPermHandler || (device.deviceId !== grantedDeviceThroughPermHandler.deviceId)
+      })
+      console.log(deviceToReturn)
+      if (deviceToReturn) {
+        callback(deviceToReturn.deviceId)
+      } else {
+        callback()
+      }
+    }
+  })
+
+  mainWindow.webContents.session.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
+    if (permission === 'usb' && details.securityOrigin === 'file:///') {
+      return true
+    }
+  })
+
+  mainWindow.webContents.session.setDevicePermissionHandler((details) => {
+    if (details.deviceType === 'usb' && details.origin === 'file://') {
+      if (!grantedDeviceThroughPermHandler) {
+        grantedDeviceThroughPermHandler = details.device
+        return true
+      } else {
+        return false
+      }
+    }
+  })
+
+  mainWindow.webContents.session.setUSBProtectedClassesHandler((details) => {
+    return details.protectedClasses.filter((usbClass) => {
+      // Exclude classes except for audio classes
+      return usbClass.indexOf('audio') === -1
+    })
+  })
+
+
 
   mainWindow.on('closed', function () {
     mainWindow = null
   })
 
   ipcMain.handle('device-info', () =>  {
-    let test = new deviceInformation();
+    let test = new DeviceService();
     return test.deviceList()
   })
 
@@ -61,6 +115,12 @@ function createWindow () {
   ipcMain.handle('lightshow-remove',  async (event, device, mountPoint, lightshowName) =>  {
     let copyManager = new CopyManagerService();
     await copyManager.removeFromDisk(device, mountPoint, lightshowName)
+  })
+
+  ipcMain.handle('device-eject',  async (event, mountPoint) =>  {
+    let deviceService = new DeviceService();
+    let device = await deviceService.getDeviceFromMountPoint(mountPoint)
+    await deviceService.ejectMountPoint(device)
   })
 
 }

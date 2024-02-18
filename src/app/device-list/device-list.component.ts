@@ -101,6 +101,10 @@ export class DeviceListComponent implements OnInit {
 
     });
   }
+
+  ejectDevice(mountPoint : MountPoint) {
+    (<any>window).device.eject(mountPoint.path)
+  }
 }
 
 @Component({

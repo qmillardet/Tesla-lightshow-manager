@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const LigthshowManager = require('./LightshowService')
-const DeviceManager = require('./deviceinformation');
+const DeviceService = require('./DeviceService');
 const { join } = require('node:path');
 const AlreadyExistLightshowError = require("./Exceptions/AlreadyExistLightshowError");
 
@@ -38,8 +38,8 @@ class CopyManagerService{
     }
 
     async #moveTeslaCamDir(device, mountPointLabel){
-        let deviceManager = new DeviceManager();
-        let deviceMountPoint = await deviceManager.getMountPoint(device, mountPointLabel);
+        let deviceService = new DeviceService();
+        let deviceMountPoint = await deviceService.getMountPoint(device, mountPointLabel);
         let teslacamDir = deviceMountPoint + '/TeslaCam/'
         if(fs.existsSync(teslacamDir)){
             let date = new Date();
@@ -50,8 +50,8 @@ class CopyManagerService{
     }
 
     async #getDeviceBaseWithLigthShow(device, mountPointLabel){
-        let deviceManager = new DeviceManager();
-        let deviceMountPoint = await deviceManager.getMountPoint(device, mountPointLabel);
+        let deviceService = new DeviceService();
+        let deviceMountPoint = await deviceService.getMountPoint(device, mountPointLabel);
         return deviceMountPoint + '/Lightshow/'
     }
 
