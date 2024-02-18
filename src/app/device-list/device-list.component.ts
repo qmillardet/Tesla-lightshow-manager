@@ -11,6 +11,7 @@ import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {SnackbarComponent} from "../snackbar/snackbar.component";
 import {MatOption, MatOptionModule} from "@angular/material/core";
+import {DeviceListAddComponent} from "../device-list-add/device-list-add.component";
 
 export interface DeviceList {
   device: string;
@@ -55,7 +56,7 @@ export class DeviceListComponent implements OnInit {
   }
 
   openElement( mountPoint : MountPoint) : void {
-    const dialogRef = this.dialog.open(DialogContentExampleDialog, {
+    const dialogRef = this.dialog.open(DeviceListAddComponent, {
       data: mountPoint,
     });
 
@@ -104,39 +105,5 @@ export class DeviceListComponent implements OnInit {
 
   ejectDevice(mountPoint : MountPoint) {
     (<any>window).device.eject(mountPoint.path)
-  }
-}
-
-@Component({
-  selector: 'dialog-content-add-dialog',
-  templateUrl: 'dialog-content-add-dialog.html',
-  standalone: true,
-  imports: [MatDialogModule, MatButtonModule, CommonModule, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule, MatOptionModule],
-})
-export class DialogContentExampleDialog implements OnInit {
-  deviceName : MountPoint;
-
-  toppings = new FormControl('');
-  toppingList: LigthShowDto[] = [];
-  selectedElement : string[] =[];
-
-  constructor(
-    public dialogRef: MatDialogRef<DialogContentExampleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: MountPoint,
-  ) {
-    this.deviceName = data;
-  }
-
-  ngOnInit(): void {
-    (<any>window).lightshow.list(this.deviceName).then((e:LigthShowDto[] ) => {
-      this.selectedElement = [];
-      e.forEach((lightShowDTO : LigthShowDto) => {
-        if (lightShowDTO.onDevice){
-          this.selectedElement.push(lightShowDTO.lightshowName)
-        }
-      })
-      this.toppingList = e;
-    })
-
   }
 }
