@@ -10,8 +10,9 @@
 
 <main class="main">
   <nav>
-    <a mat-button [routerLink]="['/']">Home</a>
-    <a mat-button [routerLink]="['/device-list']">Lightshow</a>
+    <a mat-button [routerLink]="['/home']" routerLinkActive="mat-accent">Home</a>
+    <a mat-button [routerLink]="['/device-list']" routerLinkActive="mat-accent">Lightshow</a>
+    <a mat-button [routerLink]="['/device-copy-auto']" routerLinkActive="mat-accent">Auto copy Lightshow</a>
   </nav>
   <div class="content">
     <router-outlet></router-outlet>

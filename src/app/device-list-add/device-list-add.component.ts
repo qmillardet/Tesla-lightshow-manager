@@ -1,20 +1,13 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MatButton, MatButtonModule} from "@angular/material/button";
-import {
-  MAT_DIALOG_DATA,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogModule, MatDialogRef,
-  MatDialogTitle
-} from "@angular/material/dialog";
-import {MatFormField, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
-import {MatOption} from "@angular/material/autocomplete";
-import {MatSelect, MatSelectModule} from "@angular/material/select";
+import {Component, Inject} from '@angular/core';
+import {MatButtonModule} from "@angular/material/button";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatSelectModule} from "@angular/material/select";
 import {CommonModule} from "@angular/common";
 import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatOptionModule} from "@angular/material/core";
-import {LigthShowDto, MountPoint} from "../device-list/device-list.component";
+import {MountPoint} from "../Model/MountPoint";
+import {LigthShowDto} from "../Model/LigthShowDto";
 
 @Component({
   selector: 'app-device-list-add',
