@@ -117,10 +117,11 @@ function createWindow () {
     await copyManager.removeFromDisk(device, mountPoint, lightshowName)
   })
 
-  ipcMain.handle('device-eject',  async (event, mountPoint) =>  {
+  ipcMain.handle('device-eject',  (event, mountPoint) =>  {
     let deviceService = new DeviceService();
-    let device = await deviceService.getDeviceFromMountPoint(mountPoint)
-    await deviceService.ejectMountPoint(device)
+    let device = deviceService.getDeviceFromMountPoint(mountPoint).then((device ) =>  {
+      deviceService.ejectMountPoint(device).then(r => {})
+    })
   })
 
 }

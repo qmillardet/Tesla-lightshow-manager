@@ -69,6 +69,11 @@ class LigthshowService{
         return filename;
     }
 
+  /**
+   *
+   * @param paritionName MountPath[]
+   * @returns {*[]}
+   */
     getAllLigthshow(paritionName) {
       let lightshows = [];
       let ligthshowNames = [];

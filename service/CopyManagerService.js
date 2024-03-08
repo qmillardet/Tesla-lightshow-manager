@@ -23,9 +23,10 @@ class CopyManagerService{
         if (this.#isAlreadyExistLightshow(baseDevice, lightshowName)){
             throw new AlreadyExistLightshowError('Already exist Lightshow on device, please check file : ' + baseDevice + ' # ' + lightshowName)
         }
-        fs.mkdirSync(baseDevice, { recursive: true })
-        fs.copyFileSync(ligthsowAudioFile,  baseDevice+lightshowName + '.mp3' )
-        fs.copyFileSync(ligthsowFseqFile, baseDevice + lightshowName + '.fseq'  )
+        fs.mkdir(baseDevice, { recursive: true }, () => {
+          fs.copyFile(ligthsowAudioFile,  baseDevice+lightshowName + '.mp3', () => {} )
+          fs.copyFile(ligthsowFseqFile, baseDevice + lightshowName + '.fseq', () => {}  )
+        })
 
     }
 
