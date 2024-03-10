@@ -14,10 +14,10 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef> Actions </th>
     <td mat-cell *matCellDef="let element">
-      <button mat-fab color="green" aria-label="Ajouter un Ligthshow sur cet appareil" (click)="openElement(element)">
+      <button *ngIf="!ejectedDevice.includes(element)" mat-fab color="green" aria-label="Ajouter un Ligthshow sur cet appareil" (click)="openElement(element)">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-fab color="green" aria-label="Ejecter cet appareil" (click)="ejectDevice(element)">
+      <button *ngIf="!ejectedDevice.includes(element)" mat-fab color="green" aria-label="Ejecter cet appareil" (click)="ejectDevice(element)">
         <mat-icon>eject</mat-icon>
       </button>
     </td>

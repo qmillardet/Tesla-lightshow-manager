@@ -1,16 +1,10 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
 import {CommonModule} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {MatDialog} from "@angular/material/dialog";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatSelectModule} from "@angular/material/select";
-import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {SnackbarComponent} from "../snackbar/snackbar.component";
-import {MatOption, MatOptionModule} from "@angular/material/core";
 import {DeviceListAddComponent} from "../device-list-add/device-list-add.component";
 import {LigthShowDto} from "../Model/LigthShowDto";
 import {DeviceList} from "../Model/DeviceList";
@@ -29,7 +23,9 @@ const ELEMENT_DATA: DeviceList[] = [];
 export class DeviceListComponent implements OnInit {
 
   displayedColumns: string[] = ['mountpoint', 'actions'];
-  dataSource: DeviceList[] = [];
+  dataSource: MountPoint[] = [];
+
+  ejectedDevice : MountPoint[] = [];
 
   constructor(public dialog: MatDialog, private _snackBar: MatSnackBar) {
   }
@@ -38,6 +34,12 @@ export class DeviceListComponent implements OnInit {
     setInterval((): void => {
       (<any>window).device.info().then((e: any) => {
         this.dataSource = e;
+        this.ejectedDevice.forEach((mountpoint : MountPoint) => {
+          if (!this.dataSource.includes(mountpoint)){
+            let index = this.ejectedDevice.indexOf(mountpoint);
+            this.ejectedDevice.slice(index, 1)
+          }
+        })
       })
     }, 2000)
   }
@@ -96,5 +98,6 @@ export class DeviceListComponent implements OnInit {
 
   ejectDevice(mountPoint: MountPoint) {
     (<any>window).device.eject(mountPoint.path)
+    this.ejectedDevice.push(mountPoint);
   }
 }

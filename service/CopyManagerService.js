@@ -4,6 +4,7 @@ const LigthshowManager = require('./LightshowService')
 const DeviceService = require('./DeviceService');
 const { join } = require('node:path');
 const AlreadyExistLightshowError = require("./Exceptions/AlreadyExistLightshowError");
+const {isMainThread, Worker, workerData, parentPort} = require("node:worker_threads");
 
 
 class CopyManagerService{
@@ -23,10 +24,9 @@ class CopyManagerService{
         if (this.#isAlreadyExistLightshow(baseDevice, lightshowName)){
             throw new AlreadyExistLightshowError('Already exist Lightshow on device, please check file : ' + baseDevice + ' # ' + lightshowName)
         }
-        fs.mkdir(baseDevice, { recursive: true }, () => {
-          fs.copyFile(ligthsowAudioFile,  baseDevice+lightshowName + '.mp3', () => {} )
-          fs.copyFile(ligthsowFseqFile, baseDevice + lightshowName + '.fseq', () => {}  )
-        })
+        fs.mkdirSync(baseDevice, { recursive: true })
+        fs.copyFileSync(ligthsowAudioFile,  baseDevice+lightshowName + '.mp3' )
+        fs.copyFileSync(ligthsowFseqFile, baseDevice + lightshowName + '.fseq' )
 
     }
 

@@ -2,6 +2,8 @@ const NotFoundDevice = require("./Exceptions/NotFoundDevice");
 const drivelist = require('drivelist');
 const {execSync} = require('child_process');
 const NotYetImplementedError = require("./Exceptions/NotYetImplementedError");
+const {exec} = require("node:child_process");
+const fs = require("fs");
 
 class DeviceService {
 
@@ -76,7 +78,7 @@ class DeviceService {
     async ejectMacOS(device){
       let re = /[a-zA-Z0-9/]+/g;
       device.match(re)
-      execSync('diskutil unmountDisk force ' + device)
+      exec('diskutil unmountDisk ' + device)
     }
 
   ejectWindows(device) {
