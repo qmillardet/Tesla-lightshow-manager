@@ -44,7 +44,7 @@ class CopyManagerService{
         let teslacamDir = deviceMountPoint + '/TeslaCam/'
         if(fs.existsSync(teslacamDir)){
             let date = new Date();
-            fs.renameSync(teslacamDir, deviceMountPoint + '/TeslaCam-old/' )
+            fs.renameSync(teslacamDir, deviceMountPoint + '/TeslaCam-' + Date.now().toString() + '/' )
         }
         return true;
 
