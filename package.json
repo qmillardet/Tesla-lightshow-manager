@@ -49,11 +49,18 @@
   "build": {
     "appId": "your.id",
     "mac": {
-      "category": "your.app.category.type"
+      "icon": "./public/icons/icon-messages-app-store-1024x1024.icns",
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "icon": "./public/icons/icon-messages-app-store-256x256.png"
     },
     "files": [
       "**/*",
       "dist/**/*"
-    ]
+    ],
+    "directories": {
+      "buildResources": "public"
+    }
   }
 }

@@ -12,7 +12,8 @@ let mainWindow
 function createWindow () {
   mainWindow = new BrowserWindow({
     webPreferences: {
-      nodeIntegration: true,
+      contextIsolation: true,
+      nodeIntegration: false,
       preload: path.join(__dirname, 'preload.js')
     }
   })
@@ -118,6 +119,13 @@ function createWindow () {
   })
 
   ipcMain.handle('device-eject',  (event, mountPoint) =>  {
+    let deviceService = new DeviceService();
+    let device = deviceService.getDeviceFromMountPoint(mountPoint).then((device ) =>  {
+      deviceService.ejectMountPoint(device).then(r => {})
+    })
+  })
+
+  ipcMain.handle('close-check',  (event, mountPoint) =>  {
     let deviceService = new DeviceService();
     let device = deviceService.getDeviceFromMountPoint(mountPoint).then((device ) =>  {
       deviceService.ejectMountPoint(device).then(r => {})

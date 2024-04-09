@@ -10,6 +10,6 @@ import { RouterModule } from '@angular/router';
 })
 export class HomeComponent {
 
-  icon: string = "/logo.ico"
+  icon: string = "assets/4D6056EF-D9E6-457B-A042-390691927EF8_1_105_c.jpeg"
 
 }
